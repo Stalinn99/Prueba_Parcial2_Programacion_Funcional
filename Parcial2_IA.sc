@@ -1,4 +1,5 @@
 case class Producto(nombre: String, categoria: String, precios: List[Double])
+case class ProductoPromedio(producto: Producto, promedio: Double)
 val inventario: List[Producto] = List(
   Producto("Producto 1", "Categoria 1", List(10.5, 11.5, 12.5, 13.5)),
   Producto("Producto 2", "Categoria 2", List(11.0, 12.0, 13.0, 14.0)),
@@ -51,15 +52,33 @@ val inventario: List[Producto] = List(
   Producto("Producto 49", "Categoria 4", List(34.5, 35.5, 36.5, 37.5)),
   Producto("Producto 50", "Categoria 5", List(35.0, 36.0, 37.0, 38.0))
 )
+def obtenerProductoMasValioso(
+                               lista: List[Producto],
+                               precioBase: Double,
+                               minPrecios: Int // El tipo correcto para la cantidad es Int
+                             ): ProductoPromedio = { // Retorna ProductoPromedio directamente
 
-case class ProductoPromedio(producto: Producto, promedio: Double)
+  val resultadoFinal = lista
+    // 1. FILTRAR: Productos que cumplen los criterios de cantidad y precio máximo.
+    .filter { p =>
+      p.precios.length >= minPrecios && p.precios.max > precioBase
+    }
 
-def obtenerListaProductosPromedio(lista: List[Producto], precioBase: Double, minPrecios: Double): List[ProductoPromedio] =
-  lista.filter (p => p.precios.length >= minPrecios && p.precios.max > precioBase)
+    // 2. MAPEAR: Transformar a List[ProductoPromedio] calculando el promedio.
     .map { p =>
-      val promedio:Double = p.precios.sum / p.precios.length
+      val promedio: Double = p.precios.sum / p.precios.length
       ProductoPromedio(p, promedio)
     }
 
-val listaPromedio : List[ProductoPromedio] = obtenerListaProductosPromedio(inventario,20.0,10.0)
-val resultado : Producto = listaPromedio.maxBy(_.promedio)
+    // 3. REDUCIR: Seleccionar el único elemento con el promedio más alto.
+    .maxBy(_.promedio)
+
+  // Manejo de Error Adicional (Opcional pero Recomendado):
+  // Si la lista estuviera vacía, .maxBy ya habría fallado. Si por alguna razón quieres comprobarlo
+  // antes de devolver, podrías añadir una comprobación inicial.
+
+  resultadoFinal
+}
+
+// Ejecutamos la función con 20.0 como precioBase y 4 como minPrecios
+val productoMasValioso: ProductoPromedio = obtenerProductoMasValioso(inventario, 20.0, 4)
