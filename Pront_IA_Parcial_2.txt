@@ -63,7 +63,11 @@ def obtenerListaProductosPromedio(lista: List[Producto], precioBase: Double, min
 
 val listaPromedio : List[ProductoPromedio] = obtenerListaProductosPromedio(inventario,20.0,10.0)
 val resultado : Producto = listaPromedio.maxBy(_.promedio) 
+
+
 DADO EL SIGUIENTE CÓDIGO EN SCALA ME PODRIAS ENSEÑAR LO QUE HACIA FALTA EN EL CÓDIGO PARA CUMPLETAR EL SIGUIENTE REQUERIMIENTO
+
+
 Cada producto tiene un historial de precios (lista de Double). La gerencia quiere determinar cuál es el producto “más valioso” según su precio promedio, pero solo entre aquellos productos que:
 Tienen al menos una cierta cantidad mínima de precios registrados.
 Tienen un precio máximo en su historial mayor a un valor base (por ejemplo, 20.0).
